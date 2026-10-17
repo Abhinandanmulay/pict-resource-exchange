@@ -1,0 +1,26 @@
+[
+{
+  "requestId": "REQ-202",
+  "requesterRollNo": "31201",
+  "requesterName": "Amit Deshmukh",
+  "requesterContact": "+91 98222 34567",
+  "itemTitle": "Computer Networks 5th Edition (Andrew Tanenbaum)",
+  "category": "Books",
+  "description": "Needed for preparing Unit 3 & 4 network layer protocols and socket programming.",
+  "urgency": "Moderate",
+  "datePosted": "2026-10-16",
+  "isFulfilled": false
+},
+{
+  "requestId": "REQ-203",
+  "requesterRollNo": "31142",
+  "requesterName": "Priya Patil",
+  "requesterContact": "+91 98221 23456",
+  "itemTitle": "FE Workshop Fitting Apron (Navy Blue)",
+  "category": "Aprons",
+  "description": "Required for Workshop practical session next Monday morning.",
+  "urgency": "Flexible",
+  "datePosted": "2026-10-14",
+  "isFulfilled": true
+}
+]

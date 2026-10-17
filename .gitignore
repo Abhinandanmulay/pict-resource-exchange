@@ -1,0 +1,22 @@
+# Executables and binaries
+*.exe
+*.o
+*.obj
+*.dll
+*.so
+*.dylib
+*.bin
+
+# Crash dumps & temp files
+*.tmp
+*.log
+
+# IDE & Editor artifacts
+.vscode/
+.idea/
+.gemini/
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store

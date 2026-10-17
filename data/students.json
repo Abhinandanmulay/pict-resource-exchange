@@ -1,0 +1,74 @@
+[
+{
+  "rollNo": "31201",
+  "name": "Amit Deshmukh",
+  "department": "EnTC Engineering",
+  "year": 2,
+  "email": "amit.31201@pict.edu",
+  "contactNo": "+91 98222 34567",
+  "borrowedItemIds": [],
+  "lentItemIds": [],
+  "purchasedItemIds": [],
+  "recentlyViewedItemIds": ["PICT-104", "PICT-106", "PICT-102", "PICT-102", "PICT-105", "PICT-102", "PICT-101"]
+},
+{
+  "rollNo": "31105",
+  "name": "Rohan Shinde",
+  "department": "Computer Engineering",
+  "year": 2,
+  "email": "rohan.31105@pict.edu",
+  "contactNo": "+91 98220 12345",
+  "borrowedItemIds": ["PICT-106"],
+  "lentItemIds": ["PICT-103", "PICT-18928"],
+  "purchasedItemIds": ["PICT-105"],
+  "recentlyViewedItemIds": ["PICT-102", "PICT-101", "PICT-101", "PICT-101", "PICT-101"]
+},
+{
+  "rollNo": "23320",
+  "name": "abhinandan",
+  "department": "Information Technology",
+  "year": 2,
+  "email": "abhinandanmulay07@gmail.com",
+  "contactNo": "8169659401",
+  "borrowedItemIds": [],
+  "lentItemIds": [],
+  "purchasedItemIds": [],
+  "recentlyViewedItemIds": ["PICT-101"]
+},
+{
+  "rollNo": "31350",
+  "name": "Tanvi Joshi",
+  "department": "AI & Data Science",
+  "year": 1,
+  "email": "tanvi.31350@pict.edu",
+  "contactNo": "+91 98223 45678",
+  "borrowedItemIds": [],
+  "lentItemIds": ["PICT-106", "PICT-14157"],
+  "purchasedItemIds": [],
+  "recentlyViewedItemIds": ["PICT-101", "PICT-101", "PICT-102", "PICT-106", "PICT-102", "PICT-102"]
+},
+{
+  "rollNo": "31142",
+  "name": "Priya Patil",
+  "department": "IT Engineering",
+  "year": 3,
+  "email": "priya.31142@pict.edu",
+  "contactNo": "+91 98221 23456",
+  "borrowedItemIds": [],
+  "lentItemIds": ["PICT-102", "PICT-105"],
+  "purchasedItemIds": [],
+  "recentlyViewedItemIds": ["PICT-103", "PICT-101", "PICT-106", "PICT-105"]
+},
+{
+  "rollNo": "31499",
+  "name": "Aditya Kulkarni",
+  "department": "Computer Engineering",
+  "year": 2,
+  "email": "aditya.31499@pict.edu",
+  "contactNo": "+91 98220 99999",
+  "borrowedItemIds": [],
+  "lentItemIds": [],
+  "purchasedItemIds": [],
+  "recentlyViewedItemIds": []
+}
+]

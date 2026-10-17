@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PICT Resource Exchange | Campus Peer-to-Peer E-Commerce Store</title>
+  <meta name="description" content="Peer-to-peer campus resource exchange platform for students of Pune Institute of Computer Technology. Borrow, lend, and request drawing tools, textbooks, calculators, and lab components.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Top Announcement Bar -->
+  <aside class="top-announcement" aria-label="Announcement">
+    <div class="announcement-content">
+      <span class="badge-pulse"></span>
+      <span><strong>PICT Campus Exchange:</strong> Exam preparation season active! Mini-drafters, Casio fx-991CW, and textbooks available.</span>
+      <button class="announcement-btn" id="btn-view-stats" title="Inspect C++ Data Structures">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"/></svg>
+        <span>Data Structures Engine (C++)</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <div class="brand-logo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M12 6l4 4-4 4"/>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">PICT <span class="highlight">EXCHANGE</span></h1>
+          <span class="brand-subtitle">Pune Institute of Computer Technology</span>
+        </div>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="nav-search">
+        <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search drafters, calculators, DBMS books, aprons..." autocomplete="off">
+        <button id="clear-search-btn" class="clear-search" style="display:none;" title="Clear search">&times;</button>
+      </div>
+
+      <!-- Navigation Actions & Active Student Switcher -->
+      <div class="nav-actions">
+        <!-- User Authentication & Profile Badge -->
+        <div class="user-auth-wrap" id="user-auth-wrap">
+          <button class="btn btn-outline-auth" id="btn-open-login-modal" title="Click to Sign In or Switch Student">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            <span id="nav-auth-btn-text">Sign In / Register</span>
+          </button>
+
+          <div class="user-profile-badge" id="nav-user-profile" style="display:none;" title="Click to switch student or sign out">
+            <div class="nav-avatar" id="nav-avatar">RS</div>
+            <div class="nav-user-details">
+              <span class="nav-user-name" id="nav-user-name">Student</span>
+              <span class="nav-user-roll" id="nav-user-roll">Roll: --</span>
+            </div>
+            <button class="btn-profile-switch" id="btn-switch-account" title="Switch Account">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+          </div>
+          <!-- Hidden select for fallback -->
+          <select id="active-student-select" style="display:none;"></select>
+        </div>
+
+
+        <button class="btn btn-secondary btn-icon-text" id="btn-open-lend-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Lend / Sell Item</span>
+        </button>
+
+        <button class="btn btn-secondary btn-icon-text" id="btn-open-request-modal">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>Request Item</span>
+        </button>
+
+        <button class="btn btn-ghost" id="btn-undo-action" title="Undo Last Action (LIFO Stack Pop)">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7v6h6"/><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"/></svg>
+          <span>Undo</span>
+        </button>
+
+        <button class="btn btn-primary" id="btn-open-drawer">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>My Dashboard</span>
+          <span class="badge-count" id="nav-borrowed-badge">0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="hero-container">
+      <div class="hero-content">
+        <div class="hero-badge">⚡ Powered by C++ (Hash Table • FIFO Queue • LIFO Stack • Linked List)</div>
+        <h2 class="hero-title">Campus Resource Sharing, <span class="gradient-text">Zero Waste.</span></h2>
+        <p class="hero-description">
+          Borrow engineering drafters for graphics exams, textbooks for in-sems, or workshop aprons. Lend your unused items and earn refundable deposits securely.
+        </p>
+
+        <!-- Stats Chips -->
+        <div class="hero-stats">
+          <div class="stat-card">
+            <span class="stat-num" id="stat-total-items">--</span>
+            <span class="stat-label">Total Catalog Items</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-available-items">--</span>
+            <span class="stat-label">Available Instantly</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-waitlist-count">--</span>
+            <span class="stat-label">Waitlist Queue</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-requests-count">--</span>
+            <span class="stat-label">Wanted Requests</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Content Layout -->
+  <main class="main-container">
+    <!-- View Switcher Tabs: Store Catalog vs Requests Board -->
+    <div class="view-tabs">
+      <button class="tab-btn active" id="tab-catalog" data-view="catalog">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span>Store Catalog</span>
+      </button>
+      <button class="tab-btn" id="tab-requests" data-view="requests">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+        <span>Student Wanted Board</span>
+      </button>
+      <button class="tab-btn" id="tab-recent" data-view="recent">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        <span>Recently Viewed (Stack)</span>
+      </button>
+    </div>
+
+    <!-- Store Catalog View -->
+    <section id="catalog-view" class="view-section active">
+      <!-- Filters and Category Bar -->
+      <div class="filters-bar">
+        <!-- Category Filter Pills (Linked List traversal) -->
+        <div class="category-pills" id="category-pills">
+          <button class="pill-btn active" data-category="All">All Categories</button>
+          <button class="pill-btn" data-category="Drawing Tools">Drawing Tools</button>
+          <button class="pill-btn" data-category="Books">Textbooks</button>
+          <button class="pill-btn" data-category="Electronics">Electronics & Kits</button>
+          <button class="pill-btn" data-category="Stationery">Calculators & Tools</button>
+          <button class="pill-btn" data-category="Aprons">Workshop Aprons</button>
+        </div>
+
+        <!-- Listing Type Filter Pills (Rent vs Sale) -->
+        <div class="listing-type-pills" id="listing-type-pills">
+          <button class="type-filter-btn active" data-type="all">All Offers</button>
+          <button class="type-filter-btn" data-type="rent">🔄 For Borrow / Rent</button>
+          <button class="type-filter-btn" data-type="sell">🏷️ For Permanent Sale</button>
+        </div>
+
+        <div class="filter-controls">
+          <select id="availability-filter" class="custom-select">
+            <option value="">All Availability</option>
+            <option value="available">Available Now</option>
+            <option value="borrowed">Borrowed (Waitlist)</option>
+            <option value="sold">Sold Items</option>
+          </select>
+
+          <select id="sort-select" class="custom-select">
+            <option value="default">Sort by: Default</option>
+            <option value="price-low">Borrow Fee: Low to High</option>
+            <option value="deposit-low">Deposit: Low to High</option>
+            <option value="deposit-high">Deposit: High to Low</option>
+            <option value="sell-price-low">Sale Price: Low to High</option>
+            <option value="sell-price-high">Sale Price: High to Low</option>
+            <option value="rating-high">Highest Rated (★)</option>
+            <option value="days-high">Duration: Longest</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Active Filter Status Bar -->
+      <div class="results-header">
+        <span id="results-count-text">Showing 6 items</span>
+        <div id="active-filter-tags" class="active-tags"></div>
+      </div>
+
+      <!-- Items Grid -->
+      <div class="items-grid" id="items-grid">
+        <!-- Dynamically rendered via app.js -->
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+        <div class="skeleton-card"></div>
+      </div>
+    </section>
+
+    <!-- Requests Board View -->
+    <section id="requests-view" class="view-section">
+      <div class="board-header">
+        <div>
+          <h2 class="board-title">Campus Wanted / Request Board</h2>
+          <p class="board-subtitle">Students looking for urgent tools or books. Have one lying around? Lend it and help a peer!</p>
+        </div>
+        <button class="btn btn-primary" id="btn-board-post-request">
+          + Post New Request
+        </button>
+      </div>
+
+      <!-- Board Filter Bar -->
+      <div class="board-filters-bar">
+        <div class="request-filter-pills" id="request-filter-pills">
+          <button class="pill-btn active" data-filter="all">All Needs</button>
+          <button class="pill-btn" data-filter="open">⚡ Open Requests</button>
+          <button class="pill-btn" data-filter="fulfilled">✓ Fulfilled</button>
+        </div>
+        <span class="board-count-text" id="requests-counter-text">Showing active requests</span>
+      </div>
+
+      <div class="requests-grid" id="requests-grid">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </section>
+
+    <!-- Recently Viewed (Stack Visualizer) View -->
+    <section id="recent-view" class="view-section">
+      <div class="board-header">
+        <div>
+          <h2 class="board-title">Recently Viewed Shelf (LIFO Stack)</h2>
+          <p class="board-subtitle">Demonstrates C++ Stack data structure: as you inspect items in the store, they are pushed onto your personal navigation stack.</p>
+        </div>
+        <span class="stack-badge">Top of Stack = Most Recent</span>
+      </div>
+
+      <div class="items-grid" id="recent-grid">
+        <!-- Dynamically rendered via app.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Side Drawer (My Dashboard) -->
+  <div class="drawer-overlay" id="drawer-overlay"></div>
+  <aside class="dashboard-drawer" id="dashboard-drawer">
+    <div class="drawer-header">
+      <div class="drawer-user-info">
+        <div class="user-avatar" id="drawer-avatar">RS</div>
+        <div>
+          <h3 id="drawer-student-name">Student Name</h3>
+          <span class="user-meta" id="drawer-student-meta">Roll: 31105 • Computer Engg</span>
+        </div>
+      </div>
+      <button class="btn-close" id="btn-close-drawer">&times;</button>
+    </div>
+
+    <div class="drawer-body">
+      <!-- Borrowed Items Section -->
+      <div class="drawer-section">
+        <div class="section-title-wrap">
+          <h4>Currently Borrowed by You</h4>
+          <span class="count-badge" id="drawer-borrowed-count">0</span>
+        </div>
+        <div class="drawer-item-list" id="drawer-borrowed-list">
+          <p class="empty-state">No active borrowed items.</p>
+        </div>
+      </div>
+
+      <!-- Lent Items Section -->
+      <div class="drawer-section">
+        <div class="section-title-wrap">
+          <h4>Items You Listed (Lend / Sell)</h4>
+          <span class="count-badge" id="drawer-lent-count">0</span>
+        </div>
+        <div class="drawer-item-list" id="drawer-lent-list">
+          <p class="empty-state">No items listed yet.</p>
+        </div>
+      </div>
+
+      <!-- Purchased Items Section -->
+      <div class="drawer-section">
+        <div class="section-title-wrap">
+          <h4>Items Purchased by You (Permanent)</h4>
+          <span class="count-badge" id="drawer-purchased-count">0</span>
+        </div>
+        <div class="drawer-item-list" id="drawer-purchased-list">
+          <p class="empty-state">No items purchased yet.</p>
+        </div>
+      </div>
+
+      <!-- Contact Info -->
+      <div class="drawer-footer-info">
+        <small>PICT Student ID: <strong id="drawer-roll-display">31105</strong></small>
+        <small>Email: <span id="drawer-email-display">rohan.31105@pict.edu</span></small>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Modal: Item Detail / Borrow / Waitlist -->
+  <div class="modal-overlay" id="item-modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close-btn" id="btn-close-item-modal">&times;</button>
+      <div class="modal-item-content" id="item-modal-body">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Lend Resource Form -->
+  <div class="modal-overlay" id="lend-modal-overlay">
+    <div class="modal-card modal-form-card">
+      <button class="modal-close-btn" id="btn-close-lend-modal">&times;</button>
+      <div class="modal-header">
+        <h3>List an Item on PICT Exchange</h3>
+        <p>Choose whether to lend your item for temporary borrowing or put it up for permanent sale.</p>
+      </div>
+      <form id="lend-item-form">
+        <!-- Listing Option (Rent / Sell / Both) -->
+        <div class="form-group">
+          <label class="form-label" style="font-weight:700; margin-bottom:8px; display:block;">Listing Intent / Option *</label>
+          <div class="listing-intent-tabs" id="listing-intent-tabs">
+            <label class="intent-tab-label">
+              <input type="radio" name="listingIntent" value="RENT" checked onchange="handleIntentChange('RENT')">
+              <div class="intent-tab-card">
+                <span class="intent-tab-icon">🔄</span>
+                <div>
+                  <strong>Borrow / Rent</strong>
+                  <small>Lend temporarily with deposit</small>
+                </div>
+              </div>
+            </label>
+            <label class="intent-tab-label">
+              <input type="radio" name="listingIntent" value="SELL" onchange="handleIntentChange('SELL')">
+              <div class="intent-tab-card">
+                <span class="intent-tab-icon">🏷️</span>
+                <div>
+                  <strong>Permanent Sale</strong>
+                  <small>Sell outright to peer</small>
+                </div>
+              </div>
+            </label>
+            <label class="intent-tab-label">
+              <input type="radio" name="listingIntent" value="BOTH" onchange="handleIntentChange('BOTH')">
+              <div class="intent-tab-card">
+                <span class="intent-tab-icon">💎</span>
+                <div>
+                  <strong>Rent or Buy</strong>
+                  <small>Open to rent or sell</small>
+                </div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lend-title">Item Title *</label>
+          <input type="text" id="lend-title" placeholder="e.g. Omega Mini Drafter / Korth DBMS 7th Edition" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="lend-category">Category *</label>
+            <select id="lend-category" required>
+              <option value="Drawing Tools">Drawing Tools (Drafter, Container)</option>
+              <option value="Books">Textbooks & Reference</option>
+              <option value="Electronics">Electronics & Lab Kits</option>
+              <option value="Stationery">Calculators & Stationery</option>
+              <option value="Aprons">Workshop Aprons</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="lend-condition">Condition *</label>
+            <select id="lend-condition" required>
+              <option value="Brand New">Brand New</option>
+              <option value="Like New" selected>Like New</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="lend-desc">Description & Highlights</label>
+          <textarea id="lend-desc" rows="3" placeholder="Specify if carrying case, clamp, highlighted notes, or components are included..."></textarea>
+        </div>
+
+        <!-- Rent Pricing Section -->
+        <div id="lend-rent-fields" class="form-row">
+          <div class="form-group">
+            <label for="lend-price">Borrow Fee / Price (₹) *</label>
+            <input type="number" id="lend-price" min="0" step="5" value="20" placeholder="0 for Free">
+            <small class="form-hint">Rental fee kept by lender (0 for free borrow).</small>
+          </div>
+
+          <div class="form-group">
+            <label for="lend-deposit">Refundable Deposit (₹) *</label>
+            <input type="number" id="lend-deposit" min="0" step="10" value="100" placeholder="0 for Free">
+            <small class="form-hint">Fully returned when borrower hands back item.</small>
+          </div>
+
+          <div class="form-group">
+            <label for="lend-days">Max Duration (Days) *</label>
+            <input type="number" id="lend-days" min="1" max="90" value="14">
+          </div>
+        </div>
+
+        <!-- Sell Pricing Section -->
+        <div id="lend-sell-fields" class="form-group" style="display:none;">
+          <label for="lend-sell-price">Permanent Selling Price (₹) *</label>
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+            <input type="number" id="lend-sell-price" min="0" step="10" placeholder="e.g. 250" style="flex:1; min-width:180px;">
+            <div class="quick-price-chips">
+              <button type="button" class="quick-chip" onclick="setSellPrice(50)">₹50</button>
+              <button type="button" class="quick-chip" onclick="setSellPrice(150)">₹150</button>
+              <button type="button" class="quick-chip" onclick="setSellPrice(300)">₹300</button>
+              <button type="button" class="quick-chip" onclick="setSellPrice(500)">₹500</button>
+            </div>
+          </div>
+          <small class="form-hint">One-time payment made by buyer upon physical handover on campus.</small>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-lend">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-lend">List Resource</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Request Resource Form -->
+  <div class="modal-overlay" id="request-modal-overlay">
+    <div class="modal-card modal-form-card">
+      <button class="modal-close-btn" id="btn-close-request-modal">&times;</button>
+      <div class="modal-header">
+        <h3>Post a Wanted Resource Request</h3>
+        <p>Broadcast what item you need to the PICT student community.</p>
+      </div>
+      <form id="request-item-form">
+        <div class="form-group">
+          <label for="req-title">What do you need? *</label>
+          <input type="text" id="req-title" placeholder="e.g. Casio fx-991CW Calculator for tomorrow's exam" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="req-category">Category *</label>
+            <select id="req-category" required>
+              <option value="Drawing Tools">Drawing Tools</option>
+              <option value="Books">Books</option>
+              <option value="Electronics">Electronics</option>
+              <option value="Stationery">Stationery</option>
+              <option value="Aprons">Aprons</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="req-urgency">Urgency Level *</label>
+            <select id="req-urgency" required>
+              <option value="Urgent (Exam in 1-2 days)">Urgent (Exam Soon)</option>
+              <option value="Moderate" selected>Moderate (Within a week)</option>
+              <option value="Flexible">Flexible</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="req-desc">Details / Notes</label>
+          <textarea id="req-desc" rows="3" placeholder="Specify semester, subject, or practical lab requirements..."></textarea>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" id="btn-cancel-request">Cancel</button>
+          <button type="submit" class="btn btn-primary">Publish Request</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Data Structures Inspector -->
+  <div class="modal-overlay" id="stats-modal-overlay">
+    <div class="modal-card ds-modal-card">
+      <button class="modal-close-btn" id="btn-close-stats-modal">&times;</button>
+      <div class="modal-header">
+        <div class="ds-title-wrap">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          <h3>C++ Data Structures Architecture Monitor</h3>
+        </div>
+        <p>Live diagnostic metrics of custom in-memory data structures active in the engine.</p>
+      </div>
+
+      <div class="ds-grid">
+        <div class="ds-box">
+          <div class="ds-box-header">
+            <span class="ds-tag hash">HASH TABLE</span>
+            <h4>O(1) Direct Lookup</h4>
+          </div>
+          <p class="ds-desc">Stores Item Catalog & Student Profiles indexed by ID / Roll Number with DJB2 polynomial hashing & separate chaining.</p>
+          <div class="ds-metric">
+            <span class="metric-val" id="ds-stat-items">--</span>
+            <span class="metric-key">Items Indexed</span>
+          </div>
+          <div class="ds-metric">
+            <span class="metric-val" id="ds-stat-students">--</span>
+            <span class="metric-key">Students Indexed</span>
+          </div>
+        </div>
+
+        <div class="ds-box">
+          <div class="ds-box-header">
+            <span class="ds-tag queue">FIFO QUEUE</span>
+            <h4>Strict Resource Waitlist</h4>
+          </div>
+          <p class="ds-desc">Ensures fair First-In, First-Out resource allocation. When an item is returned, the front student in queue is automatically assigned!</p>
+          <div class="ds-metric">
+            <span class="metric-val" id="ds-stat-queue">--</span>
+            <span class="metric-key">Waiting Students in Queues</span>
+          </div>
+        </div>
+
+        <div class="ds-box">
+          <div class="ds-box-header">
+            <span class="ds-tag stack">LIFO STACK</span>
+            <h4>Recent Views & Undo</h4>
+          </div>
+          <p class="ds-desc">Tracks student browsing history and action reversal. Popping top element reverts the last listing or action instantly.</p>
+          <div class="ds-metric">
+            <span class="metric-val" id="ds-stat-undo">--</span>
+            <span class="metric-key">Actions in Undo Stack</span>
+          </div>
+        </div>
+
+        <div class="ds-box">
+          <div class="ds-box-header">
+            <span class="ds-tag list">LINKED LIST</span>
+            <h4>Dynamic Catalog & Board</h4>
+          </div>
+          <p class="ds-desc">Dynamic linear chains for category filtering and community requests with zero fixed memory preallocation.</p>
+          <div class="ds-metric">
+            <span class="metric-val" id="ds-stat-requests">--</span>
+            <span class="metric-key">Community Requests</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Student Portal Login & Sign Up -->
+  <div class="modal-overlay" id="auth-modal-overlay">
+    <div class="modal-card modal-auth-card">
+      <button class="modal-close-btn" id="btn-close-auth-modal">&times;</button>
+      <div class="auth-header">
+        <div class="auth-logo-badge">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+            <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+            <path d="M12 6l4 4-4 4"/>
+          </svg>
+        </div>
+        <h3 id="auth-modal-title">PICT Student Portal</h3>
+        <p>Sign in with your Roll Number or create an account to borrow, lend, and manage campus resources.</p>
+      </div>
+
+      <!-- Auth Tabs: Sign In vs Sign Up -->
+      <div class="auth-tabs">
+        <button class="auth-tab-btn active" id="tab-auth-login">Sign In</button>
+        <button class="auth-tab-btn" id="tab-auth-register">Create Account (New Student)</button>
+      </div>
+
+      <!-- Tab Content: Sign In -->
+      <div class="auth-tab-content active" id="auth-content-login">
+        <form id="login-form">
+          <div class="form-group">
+            <label for="login-roll-input">Enter PICT Roll Number *</label>
+            <div class="input-with-icon">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <input type="text" id="login-roll-input" placeholder="e.g. 31105, 31142, 31201, 31350" required autocomplete="off">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px; padding:12px; justify-content:center;">Sign In</button>
+        </form>
+
+        <div class="quick-login-divider">
+          <span>Or Quick 1-Click Sign In</span>
+        </div>
+        <div class="quick-student-grid" id="quick-student-grid">
+          <!-- Populated dynamically with registered students -->
+        </div>
+      </div>
+
+      <!-- Tab Content: Sign Up (Register) -->
+      <div class="auth-tab-content" id="auth-content-register">
+        <form id="register-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-roll">Roll Number *</label>
+              <input type="text" id="reg-roll" placeholder="e.g. 31455" required>
+            </div>
+            <div class="form-group">
+              <label for="reg-name">Full Name *</label>
+              <input type="text" id="reg-name" placeholder="e.g. Aditya Kulkarni" required>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-dept">Department *</label>
+              <select id="reg-dept" required>
+                <option value="Computer Engineering">Computer Engineering</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="EnTC Engineering">Electronics & Telecomm (EnTC)</option>
+                <option value="AI & Data Science">Artificial Intelligence & Data Science</option>
+                <option value="First Year Engineering">First Year (FE)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="reg-year">Year of Study *</label>
+              <select id="reg-year" required>
+                <option value="1">1st Year (FE)</option>
+                <option value="2" selected>2nd Year (SE)</option>
+                <option value="3">3rd Year (TE)</option>
+                <option value="4">4th Year (BE)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="reg-email">PICT Email</label>
+              <input type="email" id="reg-email" placeholder="name.roll@pict.edu">
+            </div>
+            <div class="form-group">
+              <label for="reg-contact">Contact / WhatsApp *</label>
+              <input type="text" id="reg-contact" placeholder="+91 98220 98765" required>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary" style="width:100%; margin-top:12px; padding:12px; justify-content:center;">Register & Sign In</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Item Return & Feedback -->
+  <div class="modal-overlay" id="feedback-modal-overlay">
+    <div class="modal-card modal-feedback-card">
+      <button class="modal-close-btn" id="btn-close-feedback-modal">&times;</button>
+      <div class="modal-header">
+        <div class="feedback-badge-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </div>
+        <h3>Return Resource & Share Feedback</h3>
+        <p id="feedback-item-subtitle">Rate your borrowing experience for this item.</p>
+      </div>
+
+      <form id="feedback-return-form">
+        <input type="hidden" id="feedback-item-id">
+        
+        <div class="feedback-item-summary" id="feedback-item-summary">
+          <!-- Populated dynamically with item title, owner name -->
+        </div>
+
+        <div class="form-group star-rating-group">
+          <label>Item Condition & Rating *</label>
+          <div class="star-rating-wrap" id="star-rating-wrap">
+            <button type="button" class="star-btn" data-value="1" title="1 Star">★</button>
+            <button type="button" class="star-btn" data-value="2" title="2 Stars">★</button>
+            <button type="button" class="star-btn" data-value="3" title="3 Stars">★</button>
+            <button type="button" class="star-btn" data-value="4" title="4 Stars">★</button>
+            <button type="button" class="star-btn active" data-value="5" title="5 Stars">★</button>
+          </div>
+          <div class="star-rating-label" id="star-rating-desc">★★★★★ Excellent condition & helpful lender</div>
+        </div>
+
+        <div class="form-group">
+          <label for="feedback-comment">Review & Comments</label>
+          <textarea id="feedback-comment" rows="3" placeholder="Share helpful feedback for other PICT students (e.g., condition, included accessories, smooth return)..."></textarea>
+        </div>
+
+        <div class="form-actions feedback-actions">
+          <button type="button" class="btn btn-secondary" id="btn-skip-feedback">Skip & Just Return</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-feedback">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+            <span>Submit Review & Complete Return</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Fulfill / Lend to Peer Dialog -->
+  <div class="modal-overlay" id="fulfill-modal-overlay">
+    <div class="modal-card modal-fulfill-card">
+      <button class="modal-close-btn" id="btn-close-fulfill-modal">&times;</button>
+      <div class="modal-header">
+        <div class="fulfill-badge-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+            <circle cx="9" cy="7" r="4"></circle>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+          </svg>
+        </div>
+        <h3>Help a Peer: Lend This Item</h3>
+        <p>Connect with the requester directly to arrange handover and mark this request fulfilled.</p>
+      </div>
+
+      <div id="fulfill-modal-body">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Buy / Purchase Resource Confirmation -->
+  <div class="modal-overlay" id="buy-modal-overlay">
+    <div class="modal-card modal-fulfill-card">
+      <button class="modal-close-btn" id="btn-close-buy-modal">&times;</button>
+      <div class="modal-header">
+        <div class="fulfill-badge-icon" style="background: rgba(16, 185, 129, 0.15); color: #10b981;">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <path d="M16 10a4 4 0 0 1-8 0"></path>
+          </svg>
+        </div>
+        <h3>Buy Campus Resource (Permanent Purchase)</h3>
+        <p>Purchase this resource directly from your peer. Arrange a convenient meetup on campus.</p>
+      </div>
+
+      <div id="buy-modal-body">
+        <!-- Populated via JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Confirmation Dialog -->
+  <div class="modal-overlay" id="confirm-modal-overlay">
+    <div class="modal-card" style="max-width: 440px; text-align: center; padding: 28px 24px;">
+      <div style="width:52px; height:52px; background:rgba(239, 68, 68, 0.15); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 16px; color:#ef4444;">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      </div>
+      <h3 style="font-size:1.2rem; font-weight:700; margin-bottom:8px;" id="confirm-modal-title">Cancel Item Listing?</h3>
+      <p style="color:#94a3b8; font-size:0.9rem; line-height:1.5; margin-bottom:24px;" id="confirm-modal-msg">Are you sure you want to remove this item from the exchange catalog?</p>
+      <div style="display:flex; gap:12px; justify-content:center;">
+        <button type="button" class="btn btn-secondary" style="flex:1;" id="btn-confirm-cancel">Keep Listing</button>
+        <button type="button" class="btn btn-danger" style="flex:1;" id="btn-confirm-proceed">Yes, Cancel Listing</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-container">
+      <div class="footer-left">
+        <strong>PICT Resource Exchange</strong>
+        <span>Pune Institute of Computer Technology (PICT), Dhankawadi, Pune - 411043</span>
+      </div>
+      <div class="footer-right">
+        <span>C++ Custom Data Structures: Linked List • Queue • Stack • Hash Table</span>
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
